@@ -21,7 +21,10 @@ Open `grokking.ipynb` in [Google Colab](https://colab.research.google.com/), swi
 
 ## Results
 
-TODO: add chart and findings
+See EXPERIMENTS.md for all runs. First result: with 50% training data,
+weight decay 1 groks in 1,100 steps, weight decay 0.1 in 15,700 steps,
+and weight decay 0 did not grok within 20,000 steps (test accuracy stuck
+at about 30%).
 
 ## Next experiments
 
