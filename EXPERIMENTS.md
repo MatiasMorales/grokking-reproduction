@@ -12,6 +12,7 @@ betas (0.9, 0.98), batch size 512, 20,000 steps, seed 42.
 | 4 | add | 70% | 1 | 700 | 900 | 97.4% | Groks sooner than 50%, more data leaves fewer rules that fit | [chart](charts/add_frac70_wd1.png) |
 | 5 | add | 30% | 1 | 400 | 4,600 | 100.0% | Longer wait than 50%, few examples are cheap to memorize | [chart](charts/add_frac30_wd1.png) |
 | 6 | add | 40% | 1 | 500 | 2,600 | 100.0% | Wait between 30% and 50% | [chart](charts/add_frac40_wd1.png) |
+| 7 | sub | 50% | 1 | 700 | 3,100 | 100.0% | Groks later than add 50%, no symmetry shortcut | [chart](charts/sub_frac50_wd1.png) |
 
 ## Notes
 
@@ -53,3 +54,21 @@ betas (0.9, 0.98), batch size 512, 20,000 steps, seed 42.
   step 900 (to about 85%), big test spikes near steps 4,800 (to about 16%)
   and 5,700 (to about 21%), and smaller ones near 11,000 and 16,000. All of
   them recover right away.
+
+### Subtraction vs addition, 50% data, weight decay 1
+- Summary: test 99% at 3,100 steps (sub) vs 1,100 (add), about 2.8x later.
+  Train 99% at 700 (sub) vs 600 (add).
+- This is between addition with 40% data (2,600) and 30% data (4,600).
+- Why: addition is symmetric. Seeing 3 + 5 = 8 also tells the model
+  5 + 3 = 8. Subtraction is not: 3 - 5 = 95 but 5 - 3 = 2.
+- Rough estimate: with addition at 50%, a pair {a, b} is covered if either
+  order is in the training data, so about 1 - 0.5 x 0.5 = 75% of the table
+  is covered. To cover only 50% like subtraction does, addition would need
+  about 29% data (1 - (1 - f)^2 = 0.5). So subtraction at 50% should act
+  like addition at about 30%. The real result (3,100) is a bit faster than
+  addition at 30% (4,600), but in the same area. One seed only.
+- Shape: test accuracy stays near 0 until about step 2,200, then jumps very
+  sharply, from about 10% at step 2,500 to 100% at step 3,100. Sharper than
+  addition at 30%, which took from about 3,500 to 4,600.
+- Training accuracy dips to about 78% near step 2,500, right before the jump.
+- Fewer spikes after grokking than the addition runs with weight decay 1.

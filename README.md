@@ -30,6 +30,10 @@ Second result: with weight decay 1, less training data means a longer wait
 before the model understands. Test accuracy reached 99% at 900 steps (70% data),
 1,100 (50%), 2,600 (40%) and 4,600 (30%).
 
+Third result: subtraction groks later than addition. With 50% training data
+and weight decay 1, test accuracy reached 99% at 3,100 steps for subtraction,
+compared with 1,100 for addition.
+
 ## Next experiments
 
 - Training data fraction: try less training data (for example 30% or 40%) and see how it changes when, or whether, grokking happens.
