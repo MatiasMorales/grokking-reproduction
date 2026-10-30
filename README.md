@@ -26,6 +26,10 @@ weight decay 1 groks in 1,100 steps, weight decay 0.1 in 15,700 steps,
 and weight decay 0 did not grok within 20,000 steps (test accuracy stuck
 at about 30%).
 
+Second result: with weight decay 1, less training data means a longer wait
+before the model understands. Test accuracy reached 99% at 900 steps (70% data),
+1,100 (50%), 2,600 (40%) and 4,600 (30%).
+
 ## Next experiments
 
 - Training data fraction: try less training data (for example 30% or 40%) and see how it changes when, or whether, grokking happens.

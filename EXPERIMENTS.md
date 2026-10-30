@@ -9,6 +9,9 @@ betas (0.9, 0.98), batch size 512, 20,000 steps, seed 42.
 | 1 | add | 50% | 1 | 600 | 1,100 | 100.0% | Groks fastest, strong push toward simple rule | [chart](charts/add_frac50_wd1.png) |
 | 2 | add | 50% | 0.1 | 500 | 15,700 | 100.0% | Groks, but slower than weight decay 1 | [chart](charts/add_frac50_wd0.1.png) |
 | 3 | add | 50% | 0 | 400 | never | 29.5% | Slower than 0.1 or no grokking, no push toward simple rule | [chart](charts/add_frac50_wd0.png) |
+| 4 | add | 70% | 1 | 700 | 900 | 97.4% | Groks sooner than 50%, more data leaves fewer rules that fit | [chart](charts/add_frac70_wd1.png) |
+| 5 | add | 30% | 1 | 400 | 4,600 | 100.0% | Longer wait than 50%, few examples are cheap to memorize | [chart](charts/add_frac30_wd1.png) |
+| 6 | add | 40% | 1 | 500 | 2,600 | 100.0% | Wait between 30% and 50% | [chart](charts/add_frac40_wd1.png) |
 
 ## Notes
 
@@ -30,3 +33,23 @@ betas (0.9, 0.98), batch size 512, 20,000 steps, seed 42.
 - All runs show short spikes where accuracy drops and recovers right away.
   With weight decay 1 they are bigger: test accuracy drops to about 50% near
   step 7,500 and about 20% near step 10,500.
+
+### Training data, weight decay 1: 70% vs 50% vs 40% vs 30%
+- Summary: test 99% at 900 steps (70%), 1,100 (50%), 2,600 (40%), 4,600 (30%).
+- Less data makes the wait grow fast. Wait = test 99% step / train 99% step:
+  1.3x (70%), 1.8x (50%), 5.2x (40%), 11.5x (30%).
+- Near the low end, each 10% less data roughly doubles the time to
+  understand (1,100 -> 2,600 -> 4,600). This matches the paper.
+- Memorizing gets slightly faster with less data (train 99% at 700, 600,
+  500, 400), because there are fewer examples to memorize.
+- 70%: train and test lines almost move together, so there is barely any
+  grokking wait. The final test accuracy (97.4%) is from a spike at the
+  last step; test accuracy was 100% most of the time.
+- 30%: the classic grokking shape. Test accuracy stays near 0 until about
+  step 1,500, then jumps between steps 3,500 and 4,600.
+- 40%: test accuracy climbs from about 5% at step 1,000 to 99% at step 2,600.
+- Spikes: 30% has a big training spike near step 1,500 (to about 52%) and a
+  test spike near step 17,000 (to about 33%). 40% has a training dip near
+  step 900 (to about 85%), big test spikes near steps 4,800 (to about 16%)
+  and 5,700 (to about 21%), and smaller ones near 11,000 and 16,000. All of
+  them recover right away.
